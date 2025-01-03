@@ -1,38 +1,49 @@
 import styled from "styled-components";
+import { GlobalStyles } from "./styles/globalStyles";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import Heading from "./ui/Heading";
+import Row from "./ui/Row";
 
-const H1 = styled.h1`
-  font-size: 30px;
-  font-weight: 600;
-  background: yellow;
-`;
-const Button = styled.button`
-  font-size: 1.4rem;
-  padding: 1.2rem 1.6rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 7px;
-  margin: 20px;
-  cursor: pointer;
-  background: purple;
-  color: white;
-`;
-const Input = styled.input`
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 0%, 8rem 1.2rem;
-`;
 const StyledApp = styled.div`
-  background: orangered;
   padding: 20px;
 `;
 function App() {
   return (
-    <StyledApp>
-      <H1>The Wild Oasis</H1>
-      <Button onClick={() => alert("checked in!!")}>Check In</Button>
-      <Button onClick={() => alert("checked out!!")}>Check Out</Button>
-      <Input type="number" placeholder="number of guests" />
-    </StyledApp>
+    <>
+      {" "}
+      <GlobalStyles />
+      <StyledApp>
+        <Row type="vertical">
+          <Row type="horizontal">
+            <Heading as="h1">The Wild Oasis</Heading>
+            <div>
+              <Heading as="h3">Check In and Check Out</Heading>
+              <Button
+                variation="primary"
+                size="small"
+                onClick={() => alert("checked in!!")}
+              >
+                Check In
+              </Button>
+              <Button
+                variation="secondary"
+                size="small"
+                onClick={() => alert("checked out!!")}
+              >
+                Check Out
+              </Button>
+            </div>
+          </Row>
+          <Row type="vertical">
+            {" "}
+            <Heading as="h3">My Form</Heading>
+            <Input type="number" placeholder="number of guests" />
+            <Input type="number" placeholder="number of guests" />
+          </Row>
+        </Row>
+      </StyledApp>
+    </>
   );
 }
 
