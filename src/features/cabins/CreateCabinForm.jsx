@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import styled from "styled-components";
 
@@ -8,7 +9,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createCabin } from "../../services/apiCabins";
+import { createEditCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { StyledFormRow } from "../../ui/FormRow";
 
@@ -48,13 +49,17 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm() {
-  const { register, handleSubmit, reset, getValues, formState } = useForm();
+function CreateCabinForm({ cabin = {}, closeForm = null }) {
+  const { id: editId, ...editValues } = cabin;
+  const isEditSession = Boolean(editId);
+  const { register, handleSubmit, reset, getValues, formState } = useForm({
+    defaultValues: isEditSession ? editValues : {},
+  });
   const { errors } = formState;
   console.log(errors);
   const queryClient = useQueryClient();
-  const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createCabin,
+  const { mutate: createCabin, isLoading: isCreating } = useMutation({
+    mutationFn: createEditCabin,
     onSuccess: () => {
       toast.success("Cabin created successfully");
       queryClient.invalidateQueries("cabins");
@@ -64,9 +69,24 @@ function CreateCabinForm() {
       toast.error(err.message);
     },
   });
+  const { mutate: editCabin, isLoading: isEditing } = useMutation({
+    mutationFn: ({ id, newCabinData }) => createEditCabin(newCabinData, id),
+    onSuccess: () => {
+      toast.success("Cabin edited successfully");
+      queryClient.invalidateQueries("cabins");
+      closeForm();
+    },
+    onerror: (err) => {
+      toast.error(err.message);
+    },
+  });
+  const isWorking = isCreating || isEditing;
   function onSubmit(data) {
-    console.log(data);
-    mutate({ ...data, image: data.image[0] });
+    // console.log(data);
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+    isEditSession
+      ? editCabin({ newCabinData: { ...data, image }, id: editId })
+      : createCabin({ ...data, image: image });
   }
   function onError(errors) {
     const errorValues = Object.values(errors);
@@ -82,9 +102,9 @@ function CreateCabinForm() {
           type="text"
           id="name"
           {...register("name", {
-            required: "This field is required",
+            required: isEditSession ? false : "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </StyledFormRow>
 
@@ -96,10 +116,10 @@ function CreateCabinForm() {
           type="number"
           id="maxCapacity"
           {...register("maxCapacity", {
-            required: "This field is required",
+            required: isEditSession ? false : "This field is required",
             min: { value: 1, message: "Capacity should be at least 1" },
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </StyledFormRow>
 
@@ -111,10 +131,10 @@ function CreateCabinForm() {
           type="number"
           id="regularPrice"
           {...register("regularPrice", {
-            required: "This field is required",
+            required: isEditSession ? false : "This field is required",
             min: { value: 1, message: "Price should be at least 1" },
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </StyledFormRow>
 
@@ -124,7 +144,7 @@ function CreateCabinForm() {
           id="discount"
           defaultValue={0}
           {...register("discount", {
-            required: "This field is required",
+            required: isEditSession ? false : "This field is required",
             validate: (value) => {
               return (
                 value <= getValues().regularPrice ||
@@ -133,7 +153,7 @@ function CreateCabinForm() {
               //   console.log(getValues().regularPrice, value);
             },
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </StyledFormRow>
 
@@ -142,8 +162,10 @@ function CreateCabinForm() {
           type="number"
           id="description"
           defaultValue=""
-          {...register("description", { required: "This field is required" })}
-          disabled={isCreating}
+          {...register("description", {
+            required: isEditSession ? false : "This field is required",
+          })}
+          disabled={isWorking}
         />
       </StyledFormRow>
 
@@ -152,18 +174,27 @@ function CreateCabinForm() {
           id="image"
           accept="image/*"
           {...register("image")}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </StyledFormRow>
 
-      <FormRow>
-        <Button variation="secondary" type="reset" disabled={isCreating}>
+      <StyledFormRow>
+        <Button
+          variation="secondary"
+          type={isEditSession ? "" : "reset"}
+          disabled={isWorking}
+          onClick={isEditSession && closeForm}
+        >
           Cancel
         </Button>
-        <Button disabled={isCreating}>
-          {isCreating ? "Creating" : "Create cabin"}
+        <Button disabled={isWorking}>
+          {isEditSession
+            ? "Edit Cabin"
+            : isCreating
+            ? "Creating"
+            : "Create cabin"}
         </Button>
-      </FormRow>
+      </StyledFormRow>
     </Form>
   );
 }
