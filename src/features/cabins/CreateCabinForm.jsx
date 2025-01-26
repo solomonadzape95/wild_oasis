@@ -65,14 +65,15 @@ function CreateCabinForm() {
     },
   });
   function onSubmit(data) {
-    mutate(data);
+    console.log(data);
+    mutate({ ...data, image: data.image[0] });
   }
   function onError(errors) {
-    // const errorValues = Object.values(errors);
-    // errorValues.forEach((error) => {
-    //   toast.error(error.message);
-    // });
-    console.log(errors);
+    const errorValues = Object.values(errors);
+    errorValues.forEach((error) => {
+      toast.error(error.message);
+    });
+    // console.log(errors);
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -83,6 +84,7 @@ function CreateCabinForm() {
           {...register("name", {
             required: "This field is required",
           })}
+          disabled={isCreating}
         />
       </StyledFormRow>
 
@@ -97,10 +99,14 @@ function CreateCabinForm() {
             required: "This field is required",
             min: { value: 1, message: "Capacity should be at least 1" },
           })}
+          disabled={isCreating}
         />
       </StyledFormRow>
 
-      <StyledFormRow label="regularPrice" error={errors?.regularPrice?.message}>
+      <StyledFormRow
+        label="Regular Price"
+        error={errors?.regularPrice?.message}
+      >
         <Input
           type="number"
           id="regularPrice"
@@ -108,20 +114,26 @@ function CreateCabinForm() {
             required: "This field is required",
             min: { value: 1, message: "Price should be at least 1" },
           })}
+          disabled={isCreating}
         />
       </StyledFormRow>
 
-      <StyledFormRow label="discount" error={errors?.discount?.message}>
+      <StyledFormRow label="Discount" error={errors?.discount?.message}>
         <Input
           type="number"
           id="discount"
           defaultValue={0}
           {...register("discount", {
             required: "This field is required",
-            validate: (value) =>
-              value <= getValues().regularPrice ||
-              "Discount should be less than the regular price",
+            validate: (value) => {
+              return (
+                value <= getValues().regularPrice ||
+                "Discount should be less than the regular price"
+              );
+              //   console.log(getValues().regularPrice, value);
+            },
           })}
+          disabled={isCreating}
         />
       </StyledFormRow>
 
@@ -131,15 +143,21 @@ function CreateCabinForm() {
           id="description"
           defaultValue=""
           {...register("description", { required: "This field is required" })}
+          disabled={isCreating}
         />
       </StyledFormRow>
 
       <StyledFormRow label="Cabin Photo" error={errors?.image?.message}>
-        <FileInput id="image" accept="image/*" {...register("image")} />
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image")}
+          disabled={isCreating}
+        />
       </StyledFormRow>
 
       <FormRow>
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" disabled={isCreating}>
           Cancel
         </Button>
         <Button disabled={isCreating}>
