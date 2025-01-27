@@ -40,7 +40,7 @@ export async function createEditCabin(newCabin, id) {
 }
 export async function deleteCabin(id) {
   const { data, error } = await supabase.from("cabins").delete().eq("id", id);
-  if (!error) {
+  if (error) {
     return console.error("Cabin could not be deleted");
   }
   return data;

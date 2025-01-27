@@ -12,6 +12,8 @@ import toast from "react-hot-toast";
 import { createEditCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { StyledFormRow } from "../../ui/FormRow";
+import { useEditCabin } from "./useEditCabin";
+import { useCreateCabin } from "./useCreateCabin";
 
 const FormRow = styled.div`
   display: grid;
@@ -51,42 +53,32 @@ const Error = styled.span`
 
 function CreateCabinForm({ cabin = {}, closeForm = null }) {
   const { id: editId, ...editValues } = cabin;
+  const { editCabin, isEditing } = useEditCabin();
+  const { createCabin, isCreating } = useCreateCabin();
   const isEditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
   const { errors } = formState;
-  console.log(errors);
-  const queryClient = useQueryClient();
-  const { mutate: createCabin, isLoading: isCreating } = useMutation({
-    mutationFn: createEditCabin,
-    onSuccess: () => {
-      toast.success("Cabin created successfully");
-      queryClient.invalidateQueries("cabins");
-      reset();
-    },
-    onerror: (err) => {
-      toast.error(err.message);
-    },
-  });
-  const { mutate: editCabin, isLoading: isEditing } = useMutation({
-    mutationFn: ({ id, newCabinData }) => createEditCabin(newCabinData, id),
-    onSuccess: () => {
-      toast.success("Cabin edited successfully");
-      queryClient.invalidateQueries("cabins");
-      closeForm();
-    },
-    onerror: (err) => {
-      toast.error(err.message);
-    },
-  });
+
   const isWorking = isCreating || isEditing;
   function onSubmit(data) {
     // console.log(data);
     const image = typeof data.image === "string" ? data.image : data.image[0];
     isEditSession
-      ? editCabin({ newCabinData: { ...data, image }, id: editId })
-      : createCabin({ ...data, image: image });
+      ? editCabin(
+          { newCabinData: { ...data, image }, id: editId },
+          { onSuccess: () => closeForm() }
+        )
+      : createCabin(
+          { ...data, image: image },
+          {
+            onSuccess: () => {
+              reset();
+              closeForm();
+            },
+          }
+        );
   }
   function onError(errors) {
     const errorValues = Object.values(errors);
@@ -183,7 +175,9 @@ function CreateCabinForm({ cabin = {}, closeForm = null }) {
           variation="secondary"
           type={isEditSession ? "" : "reset"}
           disabled={isWorking}
-          onClick={isEditSession && closeForm}
+          onClick={() => {
+            closeForm();
+          }}
         >
           Cancel
         </Button>
