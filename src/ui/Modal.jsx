@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import React from "react";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -48,3 +50,6 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+export function Modal({ children }) {
+  return <StyledModal>{children}</StyledModal>;
+}
