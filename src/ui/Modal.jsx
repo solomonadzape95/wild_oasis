@@ -1,5 +1,13 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import { X } from "lucide-react";
+import React, {
+  cloneElement,
+  createContext,
+  useContext,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -50,6 +58,43 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
-export function Modal({ children }) {
-  return <StyledModal>{children}</StyledModal>;
+const ModalContext = createContext();
+
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+  const close = () => setOpenName("");
+  const open = setOpenName;
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  );
 }
+function Open({ children, opens: openWindowsName }) {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, {
+    onClick: () => {
+      open(openWindowsName);
+    },
+  });
+}
+function Window({ children, name }) {
+  const { openName, close } = useContext(ModalContext);
+  if (name !== openName) return null;
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        {" "}
+        <Button onClick={close}>
+          <X />
+        </Button>
+        {cloneElement(children, { closeForm: close })}
+      </StyledModal>
+      ;
+    </Overlay>,
+    document.body
+  );
+}
+Modal.Open = Open;
+Modal.Window = Window;
+export default Modal;

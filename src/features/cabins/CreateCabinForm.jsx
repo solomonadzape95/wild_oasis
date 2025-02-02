@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import styled from "styled-components";
@@ -51,7 +52,7 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm({ cabin = {}, closeForm = null }) {
+function CreateCabinForm({ cabin = {}, closeForm = null, type = "regular" }) {
   const { id: editId, ...editValues } = cabin;
   const { editCabin, isEditing } = useEditCabin();
   const { createCabin, isCreating } = useCreateCabin();
@@ -88,7 +89,7 @@ function CreateCabinForm({ cabin = {}, closeForm = null }) {
     // console.log(errors);
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type={type}>
       <StyledFormRow label="Cabin Name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -185,8 +186,8 @@ function CreateCabinForm({ cabin = {}, closeForm = null }) {
           {isEditSession
             ? "Edit Cabin"
             : isCreating
-            ? "Creating"
-            : "Create cabin"}
+              ? "Creating"
+              : "Create cabin"}
         </Button>
       </StyledFormRow>
     </Form>

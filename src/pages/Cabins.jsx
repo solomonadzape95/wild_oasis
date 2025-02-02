@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import { CabinsTable } from "../features/cabins/CabinTable";

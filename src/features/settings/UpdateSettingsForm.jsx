@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Form from "../../ui/Form";
 import { StyledFormRow } from "../../ui/FormRow";
 import Input from "../../ui/Input";
