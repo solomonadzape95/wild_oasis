@@ -44,12 +44,9 @@ export function CabinsTable() {
         <div>Discount</div>
         <div></div>
       </Table.Header>
-      <Table.Body
-        data={cabins}
-        render={(cabin, id) => {
-          return <CabinRow cabin={cabin} key={id} />;
-        }}
-      />
+      {cabins.map((cabin, id) => {
+        return <CabinRow cabin={cabin} key={id} />;
+      })}
     </Table>
   );
 }

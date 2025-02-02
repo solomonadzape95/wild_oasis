@@ -5,10 +5,13 @@ import React, {
   cloneElement,
   createContext,
   useContext,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import { HandleCloseModal } from "./handleCloseModal";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -72,6 +75,7 @@ function Modal({ children }) {
 }
 function Open({ children, opens: openWindowsName }) {
   const { open } = useContext(ModalContext);
+
   return cloneElement(children, {
     onClick: () => {
       open(openWindowsName);
@@ -79,18 +83,19 @@ function Open({ children, opens: openWindowsName }) {
   });
 }
 function Window({ children, name }) {
+  const ref = useRef();
   const { openName, close } = useContext(ModalContext);
+  HandleCloseModal(ref, close);
   if (name !== openName) return null;
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         {" "}
         <Button onClick={close}>
           <X />
         </Button>
         {cloneElement(children, { closeForm: close })}
       </StyledModal>
-      ;
     </Overlay>,
     document.body
   );
