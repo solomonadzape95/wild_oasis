@@ -5,7 +5,6 @@ export function HandleCloseModal(ref, close) {
     function () {
       function handleClick(e) {
         if (ref.current && !ref.current.contains(e.target)) {
-          console.log("Opened");
           close();
         }
       }
