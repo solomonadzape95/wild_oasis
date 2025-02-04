@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import SortBy from "../../ui/SortBy";
 import Filter from "../../ui/Filter";
 import TableOperations from "../../ui/TableOperations";

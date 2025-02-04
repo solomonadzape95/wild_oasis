@@ -1,10 +1,16 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/react-in-jsx-scope */
 import BookingRow from "./BookingRow";
-import Table from "../../ui/Table";
-import Menus from "../../ui/Menus";
+import { Table } from "../../ui/Table";
+import { Menus } from "../../ui/Menus";
+import Empty from "../../ui/Empty";
+import Spinner from "../../ui/Spinner";
+import { useBookings } from "../bookings/useBookings";
 
 function BookingTable() {
-  const bookings = [];
-
+  const { bookings, isLoading } = useBookings();
+  if (isLoading) return <Spinner />;
+  if (!bookings.length) return <Empty resource="bookings" />;
   return (
     <Menus>
       <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
