@@ -12,6 +12,7 @@ import { formatDistanceFromNow } from "../../utils/helpers";
 import { HiEye } from "react-icons/hi";
 import { Menus } from "../../ui/Menus";
 import { useNavigate } from "react-router-dom";
+import { HiArrowDownOnSquare } from "react-icons/hi2";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -92,6 +93,11 @@ function BookingRow({
           <Menus.Button onClick={() => navigate(`/booking/${bookingId}`)}>
             <HiEye /> See Details
           </Menus.Button>
+          {status === "unconfirmed" && (
+            <Menus.Button onClick={() => navigate(`/checkin/${bookingId}`)}>
+              <HiArrowDownOnSquare /> Check In
+            </Menus.Button>
+          )}
         </Menus.List>
       </Menus.Menu>
     </Table.Row>
