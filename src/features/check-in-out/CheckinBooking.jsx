@@ -98,6 +98,11 @@ function CheckinBooking() {
         <Button onClick={handleCheckin} disabled={!confirm || isCheckingIn}>
           Check in booking #{bookingId}
         </Button>
+        {booking.status === "checked-in" && (
+          <Button onClick={handleCheckin} disabled={!confirm || isCheckingIn}>
+            Check in booking #{bookingId}
+          </Button>
+        )}
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
