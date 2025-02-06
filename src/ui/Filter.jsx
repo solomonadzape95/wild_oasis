@@ -50,6 +50,7 @@ export function Filter({ filterField, options }) {
         <FilterButton
           onClick={() => handleClick(option.value)}
           key={option.value}
+          active={searchParams.get("status") === option.value}
         >
           {option.label}
         </FilterButton>
