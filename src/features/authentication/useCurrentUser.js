@@ -8,8 +8,7 @@ export default function useCurrentUser() {
   });
   //   const isAuthenticated = user.user.role === "authenticated";
   return {
-    user,
     isLoading,
-    isAuthenticated: user?.role === "authenticated",
+    isAuthenticated: user?.user?.role === "authenticated",
   };
 }

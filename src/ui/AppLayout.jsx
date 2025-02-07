@@ -1,11 +1,14 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import styled from "styled-components";
 import Sidebar from "./Sidebar";
 const Main = styled.main`
-  background: var(--color-grey-50);
+  background-color: var(--color-grey-50);
   padding: 4rem 4.8rem 6.4rem;
+  overflow: scroll;
 `;
+
 const StyledAppLayout = styled.div`
   display: grid;
   height: 100vw;
@@ -13,7 +16,7 @@ const StyledAppLayout = styled.div`
   grid-template-rows: auto 1fr;
 `;
 const Container = styled.div`
-  max-width: 100rem;
+  max-width: 120rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
