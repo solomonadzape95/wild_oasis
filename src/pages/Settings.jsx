@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import UpdateSettingsForm from "../features/settings/UpdateSettingsForm";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
