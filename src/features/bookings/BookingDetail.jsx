@@ -18,6 +18,7 @@ import { useCheckingOut } from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
 import { useDeleteBooking } from "./deleteBooking";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import Empty from "../../ui/Empty";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -39,6 +40,7 @@ function BookingDetail() {
     "checked-out": "silver",
   };
   if (isLoading) return <Spinner />;
+  if (!booking) return <Empty resource="booking" />;
   return (
     <>
       <Row type="horizontal">

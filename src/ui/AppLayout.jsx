@@ -6,12 +6,13 @@ import Sidebar from "./Sidebar";
 const Main = styled.main`
   background-color: var(--color-grey-50);
   padding: 4rem 4.8rem 6.4rem;
+  max-height: 90vh;
   overflow: scroll;
 `;
 
 const StyledAppLayout = styled.div`
   display: grid;
-  height: 100vw;
+  max-height: 100%;
   grid-template-columns: 26rem 1fr;
   grid-template-rows: auto 1fr;
 `;

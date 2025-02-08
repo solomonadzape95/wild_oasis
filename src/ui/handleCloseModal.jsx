@@ -8,8 +8,8 @@ export function HandleCloseModal(ref, close) {
           close();
         }
       }
-      document.addEventListener("click", handleClick, true);
-      return () => document.removeEventListener("click", handleClick, true);
+      document.addEventListener("click", handleClick, false);
+      return () => document.removeEventListener("click", handleClick, false);
     },
     [close]
   );
