@@ -1,4 +1,17 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/react-in-jsx-scope */
 import styled from "styled-components";
+import Heading from "../../ui/Heading";
+import { useDarkMode } from "../../contexts/DarkModeContext";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 
 const ChartBox = styled.div`
   /* Box */
@@ -129,4 +142,41 @@ function prepareData(startData, stays) {
     .filter((obj) => obj.value > 0);
 
   return data;
+}
+export function DurationChart({ confirmedStays }) {
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  const data = prepareData(startData, confirmedStays);
+  return (
+    <ChartBox>
+      <Heading as="h2">Stay Duration History</Heading>
+      <ResponsiveContainer width="100%" height={240}>
+        <PieChart>
+          <Pie
+            data={data}
+            innerRadius={45}
+            outerRadius={120}
+            dataKey="value"
+            nameKey="duration"
+            cy="50%"
+            cx="40%"
+            paddingAngle={3}
+          >
+            {data.map((d) => (
+              <Cell fill={d.color} stroke={d.color} key={d} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            width="30%"
+            layout="vertical"
+            iconSize={15}
+            iconType="circle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
 }
