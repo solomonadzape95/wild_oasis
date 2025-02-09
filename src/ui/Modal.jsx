@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { X } from "lucide-react";
 import React, {
   cloneElement,
   createContext,
   useContext,
-  useEffect,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { HandleCloseModal } from "./handleCloseModal";
+import { HiOutlineX } from "react-icons/hi";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -92,7 +91,7 @@ function Window({ children, name }) {
       <StyledModal ref={ref}>
         {" "}
         <Button onClick={close}>
-          <X />
+          <HiOutlineX />
         </Button>
         {cloneElement(children, { closeForm: close })}
       </StyledModal>

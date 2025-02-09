@@ -11,6 +11,6 @@ export function HandleCloseModal(ref, close) {
       document.addEventListener("click", handleClick, false);
       return () => document.removeEventListener("click", handleClick, false);
     },
-    [close]
+    [close, ref]
   );
 }
