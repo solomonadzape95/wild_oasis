@@ -53,7 +53,7 @@ export function Filter({ filterField, options }) {
   }
   return (
     <StyledFilter>
-      {options.map((option) => (
+      {options.map((option, i) => (
         <FilterButton
           onClick={() => handleClick(option.value)}
           key={option.value}

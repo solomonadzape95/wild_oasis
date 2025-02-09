@@ -3,6 +3,8 @@ import styled from "styled-components";
 import LoginForm from "../features/authentication/LoginForm";
 import Heading from "../ui/Heading";
 import Logo from "../ui/Logo";
+import useCurrentUser from "../features/authentication/useCurrentUser";
+import { useNavigate } from "react-router-dom";
 
 const LoginLayout = styled.main`
   min-height: 100vh;
@@ -15,6 +17,9 @@ const LoginLayout = styled.main`
 `;
 
 function Login() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useCurrentUser();
+  if (isAuthenticated) navigate("/dashboard");
   return (
     <LoginLayout>
       <Logo />
