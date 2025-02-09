@@ -173,7 +173,7 @@ function CreateCabinForm({ cabin = {}, closeForm = null, type = "regular" }) {
 
       <StyledFormRow>
         <Button
-          variation="secondary"
+          $variation="secondary"
           type={isEditSession ? "" : "reset"}
           disabled={isWorking}
           onClick={() => {

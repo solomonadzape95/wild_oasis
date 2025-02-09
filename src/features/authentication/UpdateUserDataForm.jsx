@@ -59,7 +59,7 @@ function UpdateUserDataForm() {
         <Button
           disabled={isUpdating}
           type="reset"
-          variation="secondary"
+          $variation="secondary"
           onClick={handleClear}
         >
           Cancel
