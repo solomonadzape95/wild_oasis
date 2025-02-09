@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-unused-vars */
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -39,6 +40,12 @@ const FilterButton = styled.button`
 `;
 export function Filter({ filterField, options }) {
   const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    if (!searchParams.get(filterField)) {
+      searchParams.set(filterField, options.at(0).value);
+      setSearchParams(searchParams);
+    }
+  }, []);
   function handleClick(value) {
     searchParams.set(filterField, value);
     if (searchParams.get("page")) searchParams.set("page", 1);
@@ -50,7 +57,7 @@ export function Filter({ filterField, options }) {
         <FilterButton
           onClick={() => handleClick(option.value)}
           key={option.value}
-          $active={searchParams.get("status") === option.value}
+          $active={searchParams.get(filterField) === option.value}
         >
           {option.label}
         </FilterButton>
