@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function useCurrentUser() {
   const navigate = useNavigate();
-  const { data: user, isLoading } = useQuery({
+  const {
+    data: user,
+    isLoading
+  } = useQuery({
     queryKey: ["user"],
     queryFn: getCurrentUser,
   });

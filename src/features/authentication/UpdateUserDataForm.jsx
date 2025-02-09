@@ -28,7 +28,6 @@ function UpdateUserDataForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(fullName, avatar);
     if (!fullName) return;
     updateUser({ fullName, avatar });
   }
